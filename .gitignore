@@ -1,0 +1,10 @@
+# Root
+.env
+.env.example
+node_modules/
+dist/
+.DS_Store
+*.log
+# Ignore infra secrets
+infra/**/*.tfstate
+infra/**/*.tfvars

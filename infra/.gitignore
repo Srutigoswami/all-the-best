@@ -1,0 +1,6 @@
+# Infra
+*.tfstate
+*.tfvars
+*.log
+.DS_Store
+aws-scripts/*.sh

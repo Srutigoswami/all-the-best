@@ -1,0 +1,5 @@
+# AWS Scripts
+*.log
+*.env
+.env.example
+.DS_Store

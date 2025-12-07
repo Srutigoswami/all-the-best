@@ -57,27 +57,6 @@ GEMINI_API_KEY=your_gemini_api_key_here
 ### 4. Install Dependencies
 #### Backend
 ```sh
-cd backend
-npm install
-```
-#### Frontend
-```sh
-cd ../frontend
-npm install
-```
-
-### 5. Run Locally (Dev Mode)
-From the repo root:
-```sh
-make dev
-# or
-docker-compose up --build
-```
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:4000
-
-### 6. Run Tests
-#### Backend
 ```sh
 cd backend
 npm test

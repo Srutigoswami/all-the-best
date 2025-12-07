@@ -1,21 +1,33 @@
 # Frontend Dockerfile
-FROM node:20-alpine AS builder
-WORKDIR /app
-# Update CA certificates and configure npm for SSL issues
-RUN apk update && apk add --no-cache ca-certificates && update-ca-certificates && \
-    npm config set strict-ssl false
-COPY package.json .
-COPY tsconfig.json .
-COPY vite.config.* .
-COPY public ./public
-COPY index.html ./
-COPY src ./src
-COPY tailwind.config.js .
-COPY postcss.config.cjs .
-RUN npm install && npm run build
 
-FROM nginx:alpine AS production
+# Build Stage
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+# Copy dependency definitions
+COPY package.json package-lock.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy source code
+COPY . .
+
+# Build the application
+RUN npm run build
+
+# Production Stage
+FROM nginx:alpine
+
+# Copy built assets to Nginx
 COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Copy Nginx config
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Expose port
 EXPOSE 80
+
+# Start Nginx
 CMD ["nginx", "-g", "daemon off;"]

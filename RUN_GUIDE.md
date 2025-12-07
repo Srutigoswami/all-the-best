@@ -25,209 +25,38 @@ Before you start, make sure you have:
 ## 🛠️ Step-by-Step Setup
 
 ### Step 1: Clone or Download the Project
-
 ```bash
-# If cloning from GitHub
-git clone https://github.com/YOUR_USERNAME/BugSage-AI.git
+git clone https://github.com/Adityism/BugSage-AI.git
 cd BugSage-AI
-
-# Or if you have the project folder
-cd /path/to/BugSage-AI-main
 ```
 
-### Step 2: Create Environment File
-
-Create a `.env` file in the project root:
+### Step 2: Setup (Ubuntu / EC2)
+We have a dedicated deployment script for Ubuntu/EC2 that installs Docker and starts the app.
 
 ```bash
-# In the project root directory
-touch .env
+chmod +x scripts/deploy.sh
+./scripts/deploy.sh
 ```
+Follow the prompts to enter your `GEMINI_API_KEY`.
 
-Add your Gemini API key to `.env`:
+### Step 3: Verify Services
+Dependencies will be installed and services started automatically.
+Run `docker ps` to confirm.
 
-```env
-GEMINI_API_KEY=your_gemini_api_key_here
-```
-
-**Important:** Replace `your_gemini_api_key_here` with your actual Gemini API key.
-
-### Step 3: Start the Application
-
-From the project root directory, run:
-
-```bash
-docker-compose up -d --build
-```
-
-This will:
-- Build both frontend and backend Docker images
-- Start both services in the background
-- Install all dependencies automatically
-
-**First time build takes 5-10 minutes** (downloading images and dependencies)
-
-### Step 4: Verify Services are Running
-
-Check if containers are running:
-
-```bash
-docker ps
-```
-
-You should see:
-- `bugsage-ai-main-backend-1` on port 4000
-- `bugsage-ai-main-frontend-1` on port 3000
-
-### Step 5: Access the Application
-
-Open your browser and go to:
-
-- **Frontend (Main App)**: http://localhost:3000
-- **Backend API**: http://localhost:4000
+### Step 4: Access the Application
+- **Frontend**: http://YOUR_EC2_IP:3000
+- **Backend**: http://YOUR_EC2_IP:4000
 
 ---
 
-## 🎯 Using the Application
+## 💻 Local Development (Linux/Mac)
+If you are running locally for development:
 
-### Navigation
-
-Once you open http://localhost:3000, you'll see:
-
-- **Sidebar Navigation** with links to:
-  - Home
-  - Dashboard
-  - Bug List
-  - Report Bug
-  - Analytics
-  - AI Playground
-  - Settings
-
-### Key Features
-
-1. **Report a Bug**
-   - Click "Report Bug" or use the button on Home page
-   - Fill in bug details
-   - AI will automatically predict severity, time, and type
-
-2. **AI Playground**
-   - Test all AI features
-   - Try different bug descriptions
-   - See real-time AI predictions
-
-3. **Dashboard**
-   - View bug analytics
-   - See charts and statistics
-   - Recent bugs list
-
----
-
-## 🛠️ Common Commands
-
-### Start Services
 ```bash
-docker-compose up -d
+chmod +x scripts/setup.sh
+./scripts/setup.sh
 ```
-
-### Stop Services
-```bash
-docker-compose down
-```
-
-### View Logs
-```bash
-# All services
-docker-compose logs -f
-
-# Just backend
-docker-compose logs -f backend
-
-# Just frontend
-docker-compose logs -f frontend
-```
-
-### Restart Services
-```bash
-docker-compose restart
-
-# Or restart specific service
-docker-compose restart backend
-docker-compose restart frontend
-```
-
-### Rebuild After Code Changes
-```bash
-# Rebuild and restart
-docker-compose up -d --build
-
-# Rebuild specific service
-docker-compose up -d --build frontend
-docker-compose up -d --build backend
-```
-
-### Check Service Status
-```bash
-docker-compose ps
-```
-
----
-
-## 🐛 Troubleshooting
-
-### Issue: Port Already in Use
-
-**Error:** `port is already allocated`
-
-**Solution:**
-```bash
-# Stop other services using ports 3000 or 4000
-# Or change ports in docker-compose.yml
-```
-
-### Issue: Docker Build Fails
-
-**Error:** `npm install` fails or SSL errors
-
-**Solution:**
-- Check your network connection
-- Ensure Docker Desktop is running
-- Try: `docker-compose down` then `docker-compose up -d --build`
-
-### Issue: API Calls Failing
-
-**Error:** CORS errors or connection refused
-
-**Solution:**
-- Verify backend is running: `docker-compose ps`
-- Check backend logs: `docker-compose logs backend`
-- Verify `.env` file has `GEMINI_API_KEY` set
-
-### Issue: Frontend Not Loading
-
-**Error:** Blank page or 404
-
-**Solution:**
-- Check frontend logs: `docker-compose logs frontend`
-- Hard refresh browser: `Cmd+Shift+R` (Mac) or `Ctrl+Shift+R` (Windows)
-- Verify frontend container is running: `docker ps`
-
-### Issue: AI Features Not Working
-
-**Error:** "AI call failed"
-
-**Solution:**
-- Verify `GEMINI_API_KEY` is set in `.env`
-- Check backend logs for API errors: `docker-compose logs backend | grep -i gemini`
-- Restart backend: `docker-compose restart backend`
-
-### Issue: Cannot Access Application
-
-**Error:** Connection refused
-
-**Solution:**
-1. Check if containers are running: `docker ps`
-2. If not running, start them: `docker-compose up -d`
-3. Check logs for errors: `docker-compose logs`
+This script acts like the old Windows `start.bat`, checking Node/NPM, copying envs, and starting dev servers.
 
 ---
 

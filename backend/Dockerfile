@@ -1,21 +1,38 @@
-# Multi-stage Dockerfile for production
-FROM node:18 AS builder
-WORKDIR /app
-# Update CA certificates and configure npm for SSL issues
-RUN apt-get update && apt-get install -y ca-certificates && update-ca-certificates && rm -rf /var/lib/apt/lists/* && \
-    npm config set strict-ssl false
-COPY package.json tsconfig.json ./
-COPY src ./src
-COPY data ./data
-RUN npm install && npm run build
+# Backend Dockerfile
 
-FROM node:18-alpine AS production
+# Build Stage
+FROM node:20-alpine AS builder
+
 WORKDIR /app
-RUN apk update && apk add --no-cache ca-certificates && update-ca-certificates && \
-    npm config set strict-ssl false
-COPY --from=builder /app/package.json ./
+
+# Copy dependency definitions first for better caching
+COPY package.json package-lock.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy source code
+COPY . .
+
+# Build the application
+RUN npm run build
+
+# Production Stage
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Install production dependencies only
+COPY package.json package-lock.json ./
+RUN npm install --only=production
+
+# Copy built artifacts from builder stage
 COPY --from=builder /app/dist ./dist
+# Copy any necessary data files (if applicable)
 COPY --from=builder /app/data ./data
-RUN npm install --omit=dev
+
+# Expose port
 EXPOSE 4000
+
+# Start server
 CMD ["node", "dist/server.js"]

@@ -67,3 +67,7 @@ docker-compose up -d --build
 - We now use a **Reverse Proxy**. The Frontend connects to `/api/`, which Nginx forwards to the Backend.
 - If you see errors, ensure you have run `docker-compose up -d --build` to update the Nginx configuration.
 
+**AI Timeout (Error 499)?**
+- The AI service can be slow. We have increased the frontend timeout to **60 seconds**.
+- If you still see timeouts, your EC2 instance might be running out of resources (check CPU/RAM).
+

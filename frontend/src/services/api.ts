@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const api = axios.create({
   baseURL: '', // Relative path to leverage Nginx/Vite proxy
-  timeout: 10000,
+  timeout: 60000,
 });
 
 export const getBugs = async () => {

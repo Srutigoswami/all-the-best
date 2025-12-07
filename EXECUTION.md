@@ -47,4 +47,23 @@ Access in your browser:
 **`http://YOUR_EC2_IP:3000`**
 
 ---
-*Note: Ensure your EC2 Security Group allows Inbound Traffic on ports 3000 (Frontend) and 4000 (Backend).*
+---
+
+## 5. Updating the App (Redeploy)
+If you have pushed new code (like the recent fixes):
+
+```bash
+# 1. Pull changes
+git pull origin main
+
+# 2. Rebuild and Restart
+docker-compose down
+docker-compose up -d --build
+```
+*Note: The recent "Reverse Proxy" fix requires a rebuild. This resolves API connection issues on EC2.*
+
+## 6. Troubleshooting
+**"Connection Refused" or API issues?**
+- We now use a **Reverse Proxy**. The Frontend connects to `/api/`, which Nginx forwards to the Backend.
+- If you see errors, ensure you have run `docker-compose up -d --build` to update the Nginx configuration.
+
